@@ -425,7 +425,7 @@ IMPORTANT: Return ONLY the JSON array, no markdown, no explanation.`;
         {/* Footer */}
         <footer className="text-center py-8 mt-8">
           <p className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider">
-            TestForge — Built with ☕ and AI
+            TestForge — Built with ☕ · Tested by MiMo v2.5 Pro
           </p>
         </footer>
       </main>
