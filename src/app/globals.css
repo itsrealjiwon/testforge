@@ -1,26 +1,189 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --bg: #FFFBF0;
+  --surface: #FFFFFF;
+  --border: #1A1A1A;
+  --shadow: #1A1A1A;
+  --accent: #FF6B35;
+  --accent-hover: #E85D2C;
+  --green: #22C55E;
+  --green-bg: #DCFCE7;
+  --red: #EF4444;
+  --red-bg: #FEE2E2;
+  --yellow: #EAB308;
+  --yellow-bg: #FEF9C3;
+  --purple: #8B5CF6;
+  --purple-bg: #EDE9FE;
+  --blue: #3B82F6;
+  --blue-bg: #DBEAFE;
+  --text: #1A1A1A;
+  --text-muted: #6B7280;
+  --radius: 0px;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+}
+
+/* Neobrutalism Utilities */
+.neo-border {
+  border: 3px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.neo-shadow {
+  box-shadow: 4px 4px 0px var(--shadow);
+}
+
+.neo-shadow-lg {
+  box-shadow: 6px 6px 0px var(--shadow);
+}
+
+.neo-card {
+  border: 3px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 4px 4px 0px var(--shadow);
+  background: var(--surface);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.neo-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--shadow);
+}
+
+.neo-btn {
+  border: 3px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 4px 4px 0px var(--shadow);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: transform 0.1s, box-shadow 0.1s;
+  cursor: pointer;
+}
+
+.neo-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px var(--shadow);
+}
+
+.neo-btn-primary {
+  background: var(--accent);
+  color: white;
+}
+
+.neo-btn-primary:hover {
+  background: var(--accent-hover);
+}
+
+.neo-input {
+  border: 3px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  font-size: 15px;
+  background: var(--surface);
+  width: 100%;
+  outline: none;
+  transition: box-shadow 0.15s;
+}
+
+.neo-input:focus {
+  box-shadow: 4px 4px 0px var(--accent);
+}
+
+.neo-input::placeholder {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Tag Styles */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  border: 2px solid var(--border);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.tag:active {
+  transform: scale(0.95);
+}
+
+.tag-green { background: var(--green-bg); color: #166534; }
+.tag-red { background: var(--red-bg); color: #991B1B; }
+.tag-yellow { background: var(--yellow-bg); color: #854D0E; }
+.tag-purple { background: var(--purple-bg); color: #5B21B6; }
+.tag-blue { background: var(--blue-bg); color: #1E40AF; }
+
+/* Typing Animation */
+@keyframes typing {
+  0%, 60% { content: '.'; }
+  20% { content: '..'; }
+  40% { content: '...'; }
+}
+
+.typing-dots::after {
+  content: '...';
+  animation: typing 1.5s infinite;
+}
+
+@keyframes bounce-in {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.05); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.4s ease-out;
+}
+
+@keyframes slide-up {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
+
+/* Checklist */
+.check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+}
+
+.check-item input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--accent);
+  cursor: pointer;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+/* Scrollbar */
+*::-webkit-scrollbar {
+  width: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border: 2px solid var(--bg);
 }
