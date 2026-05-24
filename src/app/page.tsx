@@ -191,10 +191,10 @@ IMPORTANT: Return ONLY the JSON array, no markdown, no explanation.`;
         <div className="neo-card neo-shadow-lg p-6 mb-8">
           <div className="mb-4">
             <h2 className="text-2xl font-black mb-1">
-              Ceritain fitur lo 👇
+              Describe Your Feature 👇
             </h2>
             <p className="text-sm text-[var(--text-muted)] font-medium">
-              Jelasin fitur yang mau di-test, terus AI kita brew test cases-nya. Simple kan?
+              Tell us what you want to test, and our AI will generate comprehensive test cases. It&apos;s that simple.
             </p>
           </div>
 
@@ -202,13 +202,13 @@ IMPORTANT: Return ONLY the JSON array, no markdown, no explanation.`;
             value={featureDesc}
             onChange={(e) => setFeatureDesc(e.target.value)}
             className="neo-input min-h-[100px] resize-none mb-4 font-medium"
-            placeholder="Contoh: User bisa reset password lewat email, terus login pake password baru. Harus validasi expired token juga..."
+            placeholder="e.g. User can reset password via email, then login with the new password. Must validate expired tokens too..."
           />
 
           {/* Quick Chips */}
           <div className="mb-5">
             <p className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] mb-2">
-              ⚡ Quick picks — klik aja langsung:
+              ⚡ Quick picks — click to load:
             </p>
             <div className="flex flex-wrap gap-2">
               {FEATURE_CHIPS.map((chip) => (
@@ -228,7 +228,7 @@ IMPORTANT: Return ONLY the JSON array, no markdown, no explanation.`;
             disabled={!featureDesc.trim() || loading}
             className="neo-btn neo-btn-primary w-full py-3 text-base disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            {loading ? "🍳 Masak test case dulu ya..." : "🔥 Brew Test Cases!"}
+            {loading ? "🍳 Cooking up test cases..." : "🔥 Generate Test Cases!"}
           </button>
         </div>
 
@@ -238,9 +238,9 @@ IMPORTANT: Return ONLY the JSON array, no markdown, no explanation.`;
             <div className="flex items-center gap-4">
               <div className="text-4xl animate-spin">⚙️</div>
               <div>
-                <p className="font-black text-lg">Lagi proses nih...</p>
+                <p className="font-black text-lg">Processing...</p>
                 <p className="text-sm text-[var(--text-muted)]">
-                  AI lagi mikirin semua skenario gila buat fitur lo
+                  AI is analyzing all possible scenarios for your feature
                 </p>
               </div>
             </div>
@@ -413,11 +413,11 @@ IMPORTANT: Return ONLY the JSON array, no markdown, no explanation.`;
         {!generated && !loading && testCases.length === 0 && (
           <div className="text-center py-16">
             <div className="text-6xl mb-4">🧪</div>
-            <h3 className="text-xl font-black mb-2">Belum ada test case nih</h3>
+            <h3 className="text-xl font-black mb-2">No test cases yet</h3>
             <p className="text-sm text-[var(--text-muted)] max-w-sm mx-auto">
-              Ceritain fitur lo di atas, terus klik{" "}
-              <span className="font-bold text-[var(--accent)]">Brew Test Cases</span>{" "}
-              biar AI kita generate-in. Gampang kan? 😎
+              Describe your feature above, then click{" "}
+              <span className="font-bold text-[var(--accent)]">Generate Test Cases</span>{" "}
+              and our AI will create them for you. Easy, right? 😎
             </p>
           </div>
         )}
@@ -425,7 +425,7 @@ IMPORTANT: Return ONLY the JSON array, no markdown, no explanation.`;
         {/* Footer */}
         <footer className="text-center py-8 mt-8">
           <p className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider">
-            TestForge — Built with ☕ and questionable life choices
+            TestForge — Built with ☕ and AI
           </p>
         </footer>
       </main>
