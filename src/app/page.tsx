@@ -23,6 +23,118 @@ const FEATURE_CHIPS = [
   { label: "💳 Payment Gateway", prompt: "Payment processing with multiple payment methods" },
 ];
 
+const SAMPLE_TESTS: TestCase[] = [
+  {
+    id: "sample-1",
+    title: "Happy Path — Reset password with valid token",
+    category: "Happy Path",
+    priority: "high",
+    status: null,
+    preconditions: ["User account exists with a valid email address", "Email service is operational"],
+    steps: [
+      'Navigate to the "Forgot Password" page',
+      "Enter the registered email address and submit the form",
+      "Check the email inbox for the password reset link",
+      "Click the reset link within 1 hour of issuance",
+      "Enter a new valid password and confirm it",
+      "Submit the new password form",
+    ],
+    expectedResult: "Password is updated successfully. User can log in with the new password and cannot log in with the old one.",
+    expanded: false,
+  },
+  {
+    id: "sample-2",
+    title: "Expired token — Attempt reset after 1 hour",
+    category: "Edge Case",
+    priority: "high",
+    status: null,
+    preconditions: ["User has received a password reset email", "More than 1 hour has elapsed since the token was issued"],
+    steps: [
+      "Receive the password reset email",
+      "Wait more than 1 hour for the token to expire",
+      "Click the reset link in the expired email",
+      "Attempt to enter a new password",
+    ],
+    expectedResult: "System displays an error message indicating the token has expired. User is prompted to request a new reset link. Password is not changed.",
+    expanded: false,
+  },
+  {
+    id: "sample-3",
+    title: "Invalid email — Reset request with unregistered email",
+    category: "Edge Case",
+    priority: "medium",
+    status: null,
+    preconditions: ["The email address is not associated with any account"],
+    steps: [
+      'Navigate to the "Forgot Password" page',
+      "Enter an email address that is not registered in the system",
+      "Submit the reset request form",
+    ],
+    expectedResult: "System shows a generic success message (to avoid user enumeration) but does not send any email. No account information is leaked.",
+    expanded: false,
+  },
+  {
+    id: "sample-4",
+    title: "Rate limiting — Excessive reset requests",
+    category: "Edge Case",
+    priority: "high",
+    status: null,
+    preconditions: ["User account exists", "Rate limit threshold is set (e.g., 5 requests per 15 minutes)"],
+    steps: [
+      'Navigate to the "Forgot Password" page',
+      "Submit 5 reset requests for the same email within 15 minutes",
+      "Attempt a 6th reset request within the same window",
+    ],
+    expectedResult: "The 6th request is blocked with a rate-limit error (HTTP 429 or equivalent). A message informs the user to try again later. No additional reset emails are sent.",
+    expanded: false,
+  },
+  {
+    id: "sample-5",
+    title: "SQL injection attempt on email field",
+    category: "Security",
+    priority: "critical",
+    status: null,
+    preconditions: ["Forgot Password page is accessible"],
+    steps: [
+      'Navigate to the "Forgot Password" page',
+      `Enter a SQL injection payload in the email field: ' OR '1'='1' --`,
+      "Submit the form",
+      "Verify the application does not return an error or unexpected data",
+    ],
+    expectedResult: "Input is sanitized or parameterized. System rejects the malformed input with a validation error. No SQL is executed and no data is leaked.",
+    expanded: false,
+  },
+  {
+    id: "sample-6",
+    title: "Token replay — Reuse an already-consumed token",
+    category: "Security",
+    priority: "high",
+    status: null,
+    preconditions: ["User has already successfully used a reset token to change their password"],
+    steps: [
+      "After a successful password reset, copy the reset link",
+      "Attempt to use the same reset link again",
+      "Enter a new password and submit",
+    ],
+    expectedResult: "System rejects the reused token with an appropriate error message. The password remains unchanged from the previous successful reset.",
+    expanded: false,
+  },
+  {
+    id: "sample-7",
+    title: "Weak password — Reset with non-compliant password",
+    category: "Functional",
+    priority: "medium",
+    status: null,
+    preconditions: ["User has a valid, non-expired reset token", "Password policy requires minimum 8 characters with complexity rules"],
+    steps: [
+      "Click the valid password reset link",
+      "Enter a weak password (e.g., '1234') that violates password policy",
+      "Submit the new password form",
+    ],
+    expectedResult: "System displays validation errors listing the password policy requirements. Password is not updated until a compliant password is provided.",
+    expanded: false,
+  },
+];
 const PRIORITY_STYLES: Record<string, { tag: string; label: string }> = {
   critical: { tag: "tag-red", label: "🔴 CRITICAL" },
   high: { tag: "tag-yellow", label: "🟡 HIGH" },
@@ -42,6 +154,14 @@ export default function Home() {
 
   const setStatus = (id: string, status: "pass" | "fail" | "skip") => {
     setTestCases(testCases.map((tc) => (tc.id === id ? { ...tc, status: tc.status === status ? null : status } : tc)));
+  };
+
+  const handleExample = () => {
+    setFeatureDesc(
+      "User can reset password via email. System sends a reset link with a time-limited token. User clicks link, enters new password. Token expires after 1 hour. Must validate token uniqueness and prevent replay attacks."
+    );
+    setTestCases(SAMPLE_TESTS.map((tc) => ({ ...tc, id: `tc-${Date.now()}-${tc.id}` })));
+    setGenerated(true);
   };
 
   const generateCases = async () => {
@@ -197,6 +317,13 @@ IMPORTANT: Return ONLY the JSON array, no markdown, no explanation.`;
               Tell us what you want to test, and our AI will generate comprehensive test cases. It&apos;s that simple.
             </p>
           </div>
+
+          <button
+            onClick={handleExample}
+            className="w-full mb-4 py-3 px-4 text-sm font-bold border-2 border-dashed border-[var(--accent)] text-[var(--accent)] rounded hover:bg-[var(--accent)] hover:text-white transition-colors cursor-pointer"
+          >
+            ⚡ Try Example — Password Reset Tests
+          </button>
 
           <textarea
             value={featureDesc}
